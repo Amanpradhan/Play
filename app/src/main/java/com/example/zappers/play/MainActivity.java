@@ -14,6 +14,9 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     boolean serviceBound = false;
     //agar error aye to ise public kr dena
     ArrayList<Audio> audioList;
+    public ArrayList<Audio> audio;
 
 
 
@@ -43,8 +47,27 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
+
+
+
         loadAudio();
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        Recycle_View_Adapter adapter = new Recycle_View_Adapter(audioList, getApplication());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.scrollToPosition(0);
         playAudio(audioList.get(0).getData());
+       /*recyclerView.addOnItemTouchListener(new CustomRVItemTouchListener(this, recyclerView, new RecyclerViewItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));*/
 
     }
 
@@ -121,6 +144,11 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
 
+    }
+
+    public ArrayList fetchData()
+    {
+        return audioList;
     }
 
 

@@ -8,10 +8,19 @@ import java.io.Serializable;
 
 public class Audio implements Serializable {
 
+   /*
+
+    May need to keep them public again
     private String data;
     private String title;
     private String album;
     private String artist;
+    */
+    public String data;
+    public String title;
+    public String album;
+    public String artist;
+
 
     public Audio(String data, String title, String album, String artist){
         this.data = data;
