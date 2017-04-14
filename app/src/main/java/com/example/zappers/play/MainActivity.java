@@ -53,21 +53,25 @@ public class MainActivity extends AppCompatActivity {
         loadAudio();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         Recycle_View_Adapter adapter = new Recycle_View_Adapter(audioList, getApplication());
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.scrollToPosition(0);
-        playAudio(audioList.get(0).getData());
-       /*recyclerView.addOnItemTouchListener(new CustomRVItemTouchListener(this, recyclerView, new RecyclerViewItemClickListener() {
+        playAudio(audioList.get(5).getData());
+       recyclerView.addOnItemTouchListener(new CustomRVItemTouchListener(this, recyclerView, new RecyclerViewItemClickListener() {
             @Override
             public void onClick(View view, int position) {
+                playAudio(audioList.get(position).getData());
+                Toast.makeText(MainActivity.this, "Playing position "+position, Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
+
             public void onLongClick(View view, int position) {
 
             }
-        }));*/
+        }));
 
     }
 
@@ -100,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
         {
             //service is active
             //Send media with Breoadcast Receiver
+            //jab Broadcast Receiver Bnao to ye wala part delete kr dena
+
         }
     }
 
