@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     //agar error aye to ise public kr dena
     ArrayList<Audio> audioList;
     public ArrayList<Audio> audio;
-
+    public static final String Broadcast_PLAY_NEW_AUDIO = "com.example.zappers.play.PlayNewAudio";
 
 
 
@@ -57,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.scrollToPosition(0);
-        playAudio(audioList.get(5).getData());
-       recyclerView.addOnItemTouchListener(new CustomRVItemTouchListener(this, recyclerView, new RecyclerViewItemClickListener() {
-            @Override
+        playAudio(0);
+        recyclerView.addOnItemTouchListener(new CustomRVItemTouchListener(this, recyclerView, new RecyclerViewItemClickListener() {
+           @Override
             public void onClick(View view, int position) {
-                playAudio(audioList.get(position).getData());
+                playAudio(position);
                 Toast.makeText(MainActivity.this, "Playing position "+position, Toast.LENGTH_SHORT).show();
 
             }
@@ -92,21 +92,25 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void playAudio(String media){
+    private void playAudio(int audioIndex){
         //check if service is active
         if(!serviceBound){
-            Intent playerIntent = new Intent(this, MediaPlayerService.class );
-            playerIntent.putExtra("media", media);
+            StorageUtil storage = new StorageUtil(getApplicationContext());
+            storage.storeAudio(audioList);
+            storage.storeAudioIndex(audioIndex);
+            Intent playerIntent = new Intent(this, MediaPlayerService.class);
             startService(playerIntent);
             bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+        else{
+            //store new audioIndex to SharedPreferences
+            StorageUtil storage = new StorageUtil(getApplicationContext());
+            storage.storeAudioIndex(audioIndex);
+            //send a broadcast to service PLAY_NEW_AUDIO
+            Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
+            sendBroadcast(broadcastIntent);
         }
-        else
-        {
-            //service is active
-            //Send media with Breoadcast Receiver
-            //jab Broadcast Receiver Bnao to ye wala part delete kr dena
 
-        }
     }
 
     @Override
